@@ -55,6 +55,8 @@ class ChatUser {
    * */
 
   handleChat(text) {
+    console.log("REACHED HANDLE CHAT");
+
     this.room.broadcast({
       name: this.name,
       type: "chat",
@@ -74,10 +76,11 @@ class ChatUser {
 
   handleMessage(jsonData) {
     let msg = JSON.parse(jsonData);
+    console.log("REACHED HANDLE MESSAGE");
 
     if (msg.type === "join") this.handleJoin(msg.name);
     else if (msg.type === "chat") this.handleChat(msg.text);
-    else if (msg.type === "get-joke") this.send(msg.text);
+    else if (msg.type === "get-joke") this.handleJoke();
     else throw new Error(`bad message: ${msg.type}`);
   }
   //first get msg.type == "get-joke" from front end
@@ -89,6 +92,15 @@ class ChatUser {
    * then, it will use .send to send the joke back to the user only
    *
    */
+  handleJoke() {
+    // this.room.broadcast({
+    //   name: this.name,
+    //   type: "chat",
+    //   text: "What do you call eight hobbits? A hob-byte!",
+    // });
+
+    this.send(JSON.stringify("What do you call eight hobbits? A hob-byte!"));
+  }
 
   /** Connection was closed: leave room, announce exit to others. */
 
